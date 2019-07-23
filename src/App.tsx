@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {connect} from "react-redux";
+import {Dispatch} from "redux";
 
-const App: React.FC = () => {
+interface Props {
+  dispatch: Dispatch
+}
+
+const changePage = (dispatch: Dispatch) => () => dispatch({
+  type: 'SOME_PAGE',
+  payload: {
+    query: {
+      inPayload: 'theQuery'
+    }
+  },
+  meta: {
+    query: {
+      inMeta: 'theQuery'
+    }
+  },
+  query: {
+    inRoot: 'theQuery'
+  }
+});
+
+const App: React.FC<Props> = ({ dispatch }) => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={changePage(dispatch)}>Change URL</button>
       </header>
     </div>
   );
-}
+};
 
-export default App;
+export default connect(null, dispatch => ({ dispatch }))(App);
